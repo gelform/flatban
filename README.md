@@ -1,11 +1,12 @@
 # Flatban
 
-> A filesystem-based Kanban project management system
+> A filesystem-based Kanban project management system designed for AI-assisted development
 
-Flatban is a lightweight, git-friendly Kanban board that stores tasks as markdown files. Perfect for developers who want to track tasks alongside their code without external dependencies or databases.
+Flatban is a lightweight, git-friendly Kanban board that stores tasks as markdown files. Perfect for developers who want to track tasks alongside their code without external dependencies or databases. Built from the ground up to work seamlessly with AI assistants like Claude Code for natural language task management.
 
 ## Features
 
+- **AI-native design** - Built specifically to work with AI assistants like Claude Code
 - **Filesystem-based** - Tasks are just markdown files with YAML frontmatter
 - **Git-friendly** - Plain text files that diff beautifully
 - **Zero dependencies** - Pure Node.js, no external packages
@@ -208,11 +209,12 @@ When you pull changes, run `flatban sync` to rebuild the index.
 
 ## Design Philosophy
 
-1. **Filesystem is the source of truth** - index.json is just a cache
-2. **Git-friendly** - Plain text files with meaningful diffs
-3. **Status from directory** - Moving a file = changing status
-4. **Zero configuration** - Works out of the box
-5. **No vendor lock-in** - Your data is just markdown files
+1. **AI-first** - Designed to be controlled naturally through AI assistants
+2. **Filesystem is the source of truth** - index.json is just a cache
+3. **Git-friendly** - Plain text files with meaningful diffs
+4. **Status from directory** - Moving a file = changing status
+5. **Zero configuration** - Works out of the box
+6. **No vendor lock-in** - Your data is just markdown files
 
 ## Use Cases
 
@@ -225,7 +227,9 @@ When you pull changes, run `flatban sync` to rebuild the index.
 
 ## Claude Code Integration
 
-Flatban includes a custom slash command for [Claude Code](https://claude.com/claude-code) that makes task management even easier with AI assistance.
+**Flatban was specifically designed to be used with AI assistants.** The traditional CLI commands are available, but the real power comes from natural language task management through AI.
+
+Flatban includes a custom slash command for [Claude Code](https://claude.com/claude-code) that unlocks the full potential of AI-driven project management.
 
 ### Setup
 
@@ -235,12 +239,13 @@ The `.claude/commands/flatban.md` file is included with Flatban. When you're in 
 /flatban
 ```
 
-This activates an AI assistant that understands Flatban's structure and can help you:
+This activates Claude as your project management partner, understanding Flatban's structure and helping you:
 
-- **Create tasks from natural language** - Describe your work and let Claude break it down into tasks
-- **Manage task workflow** - Move tasks between columns with simple requests
-- **Break down features** - Turn large features into logical, actionable task lists
-- **Update task details** - Modify task files with proper formatting
+- **Create tasks from natural language** - Describe your work in plain English and let Claude break it down into organized, actionable tasks
+- **Manage task workflow** - Move tasks between columns with simple conversational requests
+- **Break down features** - Turn complex features into logical, prioritized task lists automatically
+- **Update task details** - Modify tasks naturally without worrying about YAML syntax or file structure
+- **Understand your project** - Claude reads your existing tasks to provide context-aware suggestions
 
 ### Usage Examples
 
@@ -268,13 +273,15 @@ Claude will create multiple organized tasks with appropriate priorities and tags
 
 ### How It Works
 
-The slash command gives Claude context about:
+Flatban's design makes it the perfect task system for AI collaboration. The slash command gives Claude complete context about:
 - Flatban's file structure and command syntax
 - Best practices for task creation and organization
 - Proper YAML frontmatter formatting
 - Your existing tasks and board state
 
-Claude can then use the `flatban` CLI commands via Bash to create, move, and manage tasks, or directly edit task markdown files when needed.
+Claude can then use the `flatban` CLI commands or directly manipulate task files to manage your board. Because tasks are just markdown files, AI can read, create, and modify them as easily as you can - but much faster.
+
+**Why this matters:** Instead of clicking through a UI or memorizing commands, you can manage your entire project in natural conversation. "Break down the authentication feature into tasks" or "Show me what's blocking the release" - Flatban with AI understands and executes.
 
 ### Tips for Using with Claude Code
 
