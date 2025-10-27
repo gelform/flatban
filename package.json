@@ -1,0 +1,45 @@
+{
+  "name": "flatban",
+  "version": "1.0.0",
+  "description": "A filesystem-based Kanban project management system",
+  "main": "bin/flatban",
+  "bin": {
+    "flatban": "./bin/flatban"
+  },
+  "scripts": {
+    "test": "node bin/flatban help"
+  },
+  "keywords": [
+    "kanban",
+    "project-management",
+    "task-management",
+    "markdown",
+    "flat-file",
+    "cli",
+    "git-friendly",
+    "filesystem",
+    "todo",
+    "tasks",
+    "productivity"
+  ],
+  "author": "gelform",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gelform/flatban.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gelform/flatban/issues"
+  },
+  "homepage": "https://github.com/gelform/flatban#readme",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "preferGlobal": true,
+  "files": [
+    "bin",
+    "lib",
+    "README.md",
+    "LICENSE"
+  ]
+}

@@ -1,0 +1,115 @@
+#!/usr/bin/env node
+
+const init = require('../lib/commands/init');
+const create = require('../lib/commands/create');
+const move = require('../lib/commands/move');
+const sync = require('../lib/commands/sync');
+const list = require('../lib/commands/list');
+const show = require('../lib/commands/show');
+const board = require('../lib/commands/board');
+const serve = require('../lib/commands/serve');
+
+// Parse command line arguments
+const args = process.argv.slice(2);
+const command = args[0];
+const commandArgs = args.slice(1);
+
+// Parse options (--key=value or --flag)
+const options = {};
+const cleanArgs = [];
+
+for (const arg of commandArgs) {
+    if (arg.startsWith('--')) {
+        const withoutDashes = arg.substring(2);
+        if (withoutDashes.includes('=')) {
+            const [key, value] = withoutDashes.split('=');
+            options[key] = value;
+        } else {
+            options[withoutDashes] = true;
+        }
+    } else {
+        cleanArgs.push(arg);
+    }
+}
+
+// Route commands
+switch (command) {
+    case 'init':
+        init(cleanArgs);
+        break;
+    case 'create':
+        create(cleanArgs, options);
+        break;
+    case 'move':
+        move(cleanArgs);
+        break;
+    case 'sync':
+        sync(cleanArgs);
+        break;
+    case 'list':
+        list(cleanArgs, options);
+        break;
+    case 'show':
+        show(cleanArgs);
+        break;
+    case 'board':
+        board(cleanArgs, options);
+        break;
+    case 'serve':
+        serve(cleanArgs, options);
+        break;
+    case 'help':
+    case '--help':
+    case '-h':
+        showHelp();
+        break;
+    default:
+        console.error(`Unknown command: ${command}`);
+        console.error('Run "flatban help" for usage information');
+        process.exit(1);
+}
+
+function showHelp() {
+    console.log(`
+Flatban - Filesystem-based Kanban System
+
+Usage:
+  flatban <command> [options]
+
+Commands:
+  init [name]              Initialize a new Flatban board
+  create "title" [options] Create a new task
+  move <task-id> <column>  Move a task to a different column
+  sync                     Rebuild index from filesystem
+  list [column] [options]  List tasks with optional filtering
+  show <task-id>           Show full task details
+  board [options]          Display board in terminal
+  serve [options]          Start web viewer
+
+Options for create:
+  --priority=<priority>    Set task priority (low|medium|high|critical)
+  --column=<column>        Set initial column (default: todo)
+  --tags=<tag1,tag2>       Add tags to task
+  --assigned=<name>        Assign task to someone
+
+Options for list:
+  --priority=<priority>    Filter by priority
+  --tag=<tag>              Filter by tag
+  --assigned=<name>        Filter by assignee
+
+Options for board:
+  --compact                Show compact view (one line per task)
+
+Options for serve:
+  --port=<port>            Port to run server on (default: 3847)
+
+Examples:
+  flatban init "My Project"
+  flatban create "Fix login bug" --priority=high --tags=backend,security
+  flatban move abc123 in-progress
+  flatban list --priority=high
+  flatban show abc123
+  flatban board --compact
+  flatban serve --port=3000
+`);
+}
