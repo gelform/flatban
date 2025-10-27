@@ -223,6 +223,67 @@ When you pull changes, run `flatban sync` to rebuild the index.
 - **Learning** - Track course progress, tutorials
 - **Writing** - Manage blog posts, articles
 
+## Claude Code Integration
+
+Flatban includes a custom slash command for [Claude Code](https://claude.com/claude-code) that makes task management even easier with AI assistance.
+
+### Setup
+
+The `.claude/commands/flatban.md` file is included with Flatban. When you're in a Flatban project directory with Claude Code, you can use:
+
+```bash
+/flatban
+```
+
+This activates an AI assistant that understands Flatban's structure and can help you:
+
+- **Create tasks from natural language** - Describe your work and let Claude break it down into tasks
+- **Manage task workflow** - Move tasks between columns with simple requests
+- **Break down features** - Turn large features into logical, actionable task lists
+- **Update task details** - Modify task files with proper formatting
+
+### Usage Examples
+
+**Create tasks from a feature description:**
+```
+/flatban I need to add user authentication with JWT tokens and a login page
+```
+
+Claude will create multiple organized tasks with appropriate priorities and tags.
+
+**Move tasks:**
+```
+/flatban Move the authentication tasks to in-progress
+```
+
+**Get an overview:**
+```
+/flatban Show me all high-priority tasks
+```
+
+**Update existing tasks:**
+```
+/flatban Update task abc1234 to add notes about using bcrypt for password hashing
+```
+
+### How It Works
+
+The slash command gives Claude context about:
+- Flatban's file structure and command syntax
+- Best practices for task creation and organization
+- Proper YAML frontmatter formatting
+- Your existing tasks and board state
+
+Claude can then use the `flatban` CLI commands via Bash to create, move, and manage tasks, or directly edit task markdown files when needed.
+
+### Tips for Using with Claude Code
+
+- Use natural language to describe features or work items
+- Claude will automatically set reasonable priorities and tags
+- Ask Claude to show the board status: `/flatban show me the board`
+- Let Claude break down complex features into smaller tasks
+- After Claude creates tasks, review them with `flatban board` or `flatban serve`
+
 ## Tips
 
 - Use partial IDs: `flatban move abc done` instead of the full 7-character ID
@@ -230,6 +291,7 @@ When you pull changes, run `flatban sync` to rebuild the index.
 - Keep the web viewer open while working - it auto-syncs
 - Customize columns in `.flatban/config.yaml`
 - Archive old boards: just move the `.flatban/` directory
+- Use `/flatban` with Claude Code for AI-powered task management
 
 ## License
 
