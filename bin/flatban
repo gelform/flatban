@@ -91,6 +91,8 @@ Options for create:
   --column=<column>        Set initial column (default: todo)
   --tags=<tag1,tag2>       Add tags to task
   --assigned=<name>        Assign task to someone
+  --description=<text>     Add description (use \\n for line breaks)
+  --notes=<text>           Add notes (use \\n for line breaks)
 
 Options for list:
   --priority=<priority>    Filter by priority
@@ -106,6 +108,7 @@ Options for serve:
 Examples:
   flatban init "My Project"
   flatban create "Fix login bug" --priority=high --tags=backend,security
+  flatban create "Add feature" --description="Feature details" --notes="- Step 1\\n- Step 2"
   flatban move abc123 in-progress
   flatban list --priority=high
   flatban show abc123

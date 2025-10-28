@@ -63,11 +63,14 @@ Create a new task with a unique 7-character ID.
 - `--column=<column>` - Starting column (default: todo)
 - `--tags=<tag1,tag2>` - Comma-separated tags
 - `--assigned=<name>` - Assignee name
+- `--description=<text>` - Task description (use `\n` for line breaks)
+- `--notes=<text>` - Task notes (use `\n` for line breaks)
 
 **Examples:**
 ```bash
 flatban create "Implement API endpoint" --priority=high --tags=backend,api
 flatban create "Write tests" --column=backlog --assigned=alice
+flatban create "Fix dropdown bug" --description="Convert dropdown to toggle" --notes="- ContactForm.tsx:400-412 uses IonSelect\n- Required: Simple IonToggle"
 ```
 
 ### `flatban move <task-id> <column>`
@@ -254,7 +257,14 @@ This activates Claude as your project management partner, understanding Flatban'
 /flatban I need to add user authentication with JWT tokens and a login page
 ```
 
-Claude will create multiple organized tasks with appropriate priorities and tags.
+Claude will create multiple organized tasks with appropriate priorities, tags, descriptions, and implementation notes.
+
+**Create a task with specific details:**
+```
+/flatban Create a task: Contact status is dropdown, not toggle. ContactForm.tsx:400-412 uses IonSelect. Need IonToggle instead.
+```
+
+Claude will parse your description and create a properly formatted task with all the details in the right sections.
 
 **Move tasks:**
 ```
@@ -286,7 +296,8 @@ Claude can then use the `flatban` CLI commands or directly manipulate task files
 ### Tips for Using with Claude Code
 
 - Use natural language to describe features or work items
-- Claude will automatically set reasonable priorities and tags
+- Claude will automatically set reasonable priorities, tags, and add descriptions/notes
+- Claude now uses `--description` and `--notes` flags to create fully detailed tasks in one command
 - Ask Claude to show the board status: `/flatban show me the board`
 - Let Claude break down complex features into smaller tasks
 - After Claude creates tasks, review them with `flatban board` or `flatban serve`

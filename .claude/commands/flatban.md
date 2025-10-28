@@ -20,6 +20,8 @@ Help the user create, update, or manage their Flatban tasks efficiently. When th
   - `--column=<backlog|todo|in-progress|review|done>`
   - `--tags=<tag1,tag2>`
   - `--assigned=<name>`
+  - `--description=<text>` - Add description (use `\n` for line breaks)
+  - `--notes=<text>` - Add notes (use `\n` for line breaks)
 - `flatban move <task-id> <column>` - Move tasks between columns
 - `flatban list [column] [options]` - List tasks with filtering
 - `flatban show <task-id>` - Show full task details
@@ -56,12 +58,15 @@ Detailed description here.
 - Use descriptive, action-oriented titles (e.g., "Implement user authentication" not "Auth")
 - Set appropriate priority based on urgency and importance
 - Add relevant tags for categorization (e.g., frontend, backend, bug, feature)
-- Include useful context in the description section
+- Include useful context using `--description` and `--notes` flags (use `\n` for line breaks)
 - Break large features into multiple smaller tasks
+- You can now add descriptions and notes directly during task creation instead of editing files afterward
 
 ## When Updating Tasks
 
-If manually editing task files (rather than using CLI):
+**Preferred Method:** Use `--description` and `--notes` flags during creation to avoid manual file editing.
+
+If you need to manually edit task files after creation:
 1. Use the Edit or Write tool to modify the task markdown file
 2. Run `flatban sync` to rebuild the index
 3. Preserve the YAML frontmatter structure
@@ -72,11 +77,16 @@ If manually editing task files (rather than using CLI):
 **User says:** "I need to add authentication to the app"
 
 You might create:
-- `flatban create "Design authentication flow" --priority=high --tags=backend,planning --column=todo`
-- `flatban create "Implement JWT token generation" --priority=high --tags=backend,security --column=backlog`
+- `flatban create "Design authentication flow" --priority=high --tags=backend,planning --column=todo --description="Design the complete auth flow including login, signup, and password reset"`
+- `flatban create "Implement JWT token generation" --priority=high --tags=backend,security --column=backlog --notes="- Use jsonwebtoken library\n- 24 hour expiry\n- Include user ID and role in payload"`
 - `flatban create "Add login API endpoint" --priority=high --tags=backend,api --column=backlog`
 - `flatban create "Create login UI component" --priority=high --tags=frontend --column=backlog`
 - `flatban create "Add authentication tests" --priority=medium --tags=testing --column=backlog`
+
+**User says:** "Create a task: Contact status is dropdown, not toggle. ContactForm.tsx:400-412 uses IonSelect. Need IonToggle instead."
+
+You would create:
+- `flatban create "Convert contact status dropdown to toggle" --priority=high --tags=frontend,ui --description="Replace the dropdown with a simple toggle for better UX" --notes="- ContactForm.tsx:400-412 currently uses IonSelect with Active/Unsubscribed\n- Required: Simple IonToggle labeled 'Unsubscribe'\n- Update form validation logic"`
 
 **User says:** "Move the auth task to in progress"
 
