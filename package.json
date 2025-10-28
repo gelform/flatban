@@ -41,5 +41,8 @@
     "lib",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "dependencies": {
+    "marked": "^12.0.0"
+  }
 }
