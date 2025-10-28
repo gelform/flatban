@@ -242,6 +242,16 @@ The `.claude/commands/flatban.md` file is included with Flatban. When you're in 
 /flatban
 ```
 
+This activates Claude as your project management partner in "Flatban mode". **After running `/flatban` once, you can use natural language for the rest of the session** - no need to keep mentioning "flatban"!
+
+Just say:
+- "Do the next task"
+- "Create a task for fixing the login bug"
+- "Show me the board"
+- "Move task abc to review"
+
+Claude will understand you're working with Flatban and handle everything accordingly.
+
 This activates Claude as your project management partner, understanding Flatban's structure and helping you:
 
 - **Create tasks from natural language** - Describe your work in plain English and let Claude break it down into organized, actionable tasks
@@ -249,6 +259,7 @@ This activates Claude as your project management partner, understanding Flatban'
 - **Break down features** - Turn complex features into logical, prioritized task lists automatically
 - **Update task details** - Modify tasks naturally without worrying about YAML syntax or file structure
 - **Understand your project** - Claude reads your existing tasks to provide context-aware suggestions
+- **Do tasks automatically** - Ask Claude to "do" a task and it will read the requirements, implement the changes, and move the task to review
 
 ### Usage Examples
 
@@ -281,6 +292,14 @@ Claude will parse your description and create a properly formatted task with all
 /flatban Update task abc1234 to add notes about using bcrypt for password hashing
 ```
 
+**Do a task (implement and move to review):**
+```
+/flatban Do the next task
+/flatban Do task abc1234
+```
+
+Claude will read the task, implement the changes, and move it to review when complete.
+
 ### How It Works
 
 Flatban's design makes it the perfect task system for AI collaboration. The slash command gives Claude complete context about:
@@ -300,7 +319,8 @@ Claude can then use the `flatban` CLI commands or directly manipulate task files
 - Claude now uses `--description` and `--notes` flags to create fully detailed tasks in one command
 - Ask Claude to show the board status: `/flatban show me the board`
 - Let Claude break down complex features into smaller tasks
-- After Claude creates tasks, review them with `flatban board` or `flatban serve`
+- Ask Claude to "do" the next task and it will implement it automatically
+- After Claude creates or completes tasks, review them with `flatban board` or `flatban serve`
 
 ## Tips
 

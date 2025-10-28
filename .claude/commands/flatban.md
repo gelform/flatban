@@ -4,6 +4,8 @@ description: Create or update Flatban tasks with AI assistance
 
 You are helping the user manage their Flatban Kanban board. Flatban is a filesystem-based task management system where tasks are markdown files with YAML frontmatter.
 
+**IMPORTANT**: Once this command is invoked with `/flatban`, you should remain in "Flatban mode" for the rest of the conversation. The user will use natural language without needing to mention "flatban" again. Phrases like "do the next task", "create a task for X", or "show me the board" should all be interpreted as Flatban commands.
+
 ## Your Role
 
 Help the user create, update, or manage their Flatban tasks efficiently. When the user describes work or features:
@@ -26,6 +28,40 @@ Help the user create, update, or manage their Flatban tasks efficiently. When th
 - `flatban list [column] [options]` - List tasks with filtering
 - `flatban show <task-id>` - Show full task details
 - `flatban sync` - Rebuild index after manual edits
+
+## Special Workflow: "Do" a Task
+
+When the user asks you to "do" a task, follow this workflow:
+
+1. **Get the task**: Use `flatban list <column>` to find tasks (defaults to 'todo' column, oldest first)
+2. **Show task and confirm**: Display the task details and ask user to confirm this is the correct task to work on
+3. **Move to in-progress**: Use `flatban move <task-id> in-progress` to mark it as being worked on
+4. **Read task details**: Use `flatban show <task-id>` or read the task markdown file directly for full context
+5. **Implement the task**: Actually write the code, fix the bug, or complete the work described
+6. **Move to review**: Use `flatban move <task-id> review` to mark it as done and ready for review
+
+### Example "Do" Workflow
+
+**User says:** "Do the next task" or "Do a task from todo"
+
+You would:
+1. Run `flatban list todo` to see tasks in the todo column
+2. Pick the first task and show it to the user: "I found task abc1234: 'Fix login bug'. Should I work on this one?"
+3. Wait for user confirmation
+4. Run `flatban move abc1234 in-progress`
+5. Run `flatban show abc1234` to read full details
+6. Implement the changes described in the task
+7. Run `flatban move abc1234 review` when complete
+
+**User says:** "Do task abc1234"
+
+You would:
+1. Run `flatban show abc1234` to read and display the task
+2. Ask user: "Should I implement this task?"
+3. Wait for user confirmation
+4. Run `flatban move abc1234 in-progress`
+5. Implement the changes
+6. Run `flatban move abc1234 review` when complete
 
 ## Task File Format
 
