@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Flatban is a filesystem-based Kanban project management system designed specifically for AI-assisted development. It stores tasks as markdown files with YAML frontmatter, making it git-friendly and portable. Built with zero external dependencies using pure Node.js.
+Flatban is a filesystem-based Kanban project management system designed specifically for AI-assisted development. It stores tasks as markdown files with YAML frontmatter, making it git-friendly and portable. Built with minimal dependencies (only `marked` for markdown rendering) using pure Node.js.
 
 **Key Design Principle**: The filesystem is the source of truth. The `index.json` file is merely a performance cache that can always be rebuilt from the markdown files.
 
@@ -45,6 +45,7 @@ flatban show abc1234           # Full task details
 flatban board                  # Terminal view
 flatban board --compact        # Compact view
 flatban serve                  # Web UI at http://localhost:3847
+flatban kanban                 # Same as serve (auto-opens browser)
 
 # Rebuild index from filesystem
 flatban sync
@@ -68,9 +69,13 @@ flatban sync
 
 **lib/server.js** - Web UI server:
 - Pure Node.js HTTP server (no Express or frameworks)
+- Real-time updates via Server-Sent Events (SSE) - keeps persistent connection to instantly broadcast changes
 - Auto-syncs on page load by checking file modification times
-- Generates HTML with embedded CSS (no build step)
+- Filesystem watcher for CLI command changes (broadcasts SSE updates when files change)
+- Drag-and-drop task movement between columns via `/api/move` endpoint
+- Generates HTML with embedded CSS and JavaScript (no build step)
 - Modal-based task details using CSS :target pseudo-class
+- Uses `marked` library to render task markdown content safely
 
 ### Command Structure
 Each command in `lib/commands/` follows a consistent pattern:
@@ -95,7 +100,7 @@ Each command in `lib/commands/` follows a consistent pattern:
 
 **lib/commands/board.js** - Terminal-based Kanban board visualization
 
-**lib/commands/serve.js** - Starts web server for browser-based board view
+**lib/commands/serve.js** - Starts web server for browser-based board view with intelligent port selection (tries requested port, falls back to random available port if in use). Auto-opens browser by default (use `--no-open` to disable). Also accessible via `flatban kanban` command.
 
 ## File Structure
 
@@ -151,8 +156,38 @@ Always run `flatban sync` after manual filesystem changes. The web server auto-s
 ### Partial ID Matching
 The `findTaskByPartialId()` utility allows users to type just the first few characters of a task ID (e.g., "abc" instead of "abc1234"). It errors if multiple matches are found or if no matches exist.
 
-### No External Dependencies
-The project uses pure Node.js standard library (`fs`, `path`, `http`). This is an intentional design choice for portability and simplicity. The custom YAML parser handles the simple subset needed for config files.
+### Dependencies
+The project uses pure Node.js standard library (`fs`, `path`, `http`, `net`) with one external dependency:
+- `marked` (v12.0.0+) - For safely rendering markdown content in the web UI
+
+This minimal dependency approach is intentional for portability and simplicity. The custom YAML parser handles the simple subset needed for config files without requiring external YAML libraries.
+
+### Real-Time Updates
+The web UI uses Server-Sent Events (SSE) to maintain a persistent connection with the server. Changes made via CLI commands trigger filesystem watch events, which broadcast SSE updates to all connected clients, causing instant board refreshes. The SSE connection automatically reconnects if dropped. This replaces the old polling mechanism for better performance and instant feedback.
+
+### Web Server API
+The server exposes these endpoints:
+- `GET /` - Serves the main board HTML (auto-syncs if needed)
+- `GET /api/events` - SSE endpoint for real-time updates (persistent connection)
+- `GET /api/status` - Returns `last_sync` timestamp (kept for backwards compatibility)
+- `POST /api/move` - Move task between columns (accepts `{taskId, targetColumn}`)
+
+When tasks are moved via drag-and-drop in the web UI, it posts to `/api/move`, which updates the filesystem and broadcasts an SSE update to all clients.
+
+### Port Selection Strategy
+`lib/commands/serve.js` implements intelligent port selection to avoid conflicts:
+1. Try the requested port (default: 3847, or `--port=<num>`)
+2. If unavailable, try up to 10 random ports between 4000-9999 (avoiding common ports like 3000, 8080, etc.)
+3. Error if no port found after 10 attempts
+4. Uses `net.createServer()` to test port availability before binding
+
+### Browser Auto-Open
+Both `flatban serve` and `flatban kanban` commands automatically open the board in your default browser after starting the server. This uses platform-specific commands:
+- macOS: `open`
+- Windows: `start`
+- Linux/Unix: `xdg-open`
+
+To disable auto-open, use the `--no-open` flag: `flatban serve --no-open`
 
 ## Claude Code Integration
 
