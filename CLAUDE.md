@@ -28,8 +28,8 @@ npm uninstall -g flatban
 flatban init "Project Name"
 
 # Create tasks
-flatban create "Task title" --priority=high --tags=backend,api --column=todo
-flatban create "Task with details" --description="Task description" --notes="- Note 1\n- Note 2"
+flatban create "Task title" --priority high --tags backend,api --column todo
+flatban create "Task with details" --description "Task description" --notes "- Note 1\n- Note 2"
 
 # Move tasks (partial IDs work)
 flatban move abc1234 in-progress
@@ -38,7 +38,7 @@ flatban move abc in-progress  # Partial ID
 # View tasks
 flatban list                   # All tasks
 flatban list in-progress       # Filter by column
-flatban list --priority=high   # Filter by priority
+flatban list --priority high   # Filter by priority
 flatban show abc1234           # Full task details
 
 # View board
@@ -54,7 +54,13 @@ flatban sync
 ## Architecture
 
 ### Entry Point
-- **bin/flatban** - CLI entry point and command router. Simple argument parser that splits commands and options (--key=value format).
+- **bin/flatban** - CLI entry point and command router. Flexible argument parser that supports both `--key=value` and `--key value` formats for options.
+
+**Argument Parsing Logic:**
+- `--key=value` - Splits on `=` and assigns value
+- `--key value` - Looks ahead to next argument; if it doesn't start with `--`, uses it as value
+- `--flag` - If no value follows or next arg starts with `--`, sets to `true` (boolean)
+- This dual format support makes the CLI more intuitive and matches common CLI tool behavior
 
 ### Core Modules
 
