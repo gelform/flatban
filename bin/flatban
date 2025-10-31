@@ -8,6 +8,7 @@ const list = require('../lib/commands/list');
 const show = require('../lib/commands/show');
 const board = require('../lib/commands/board');
 const serve = require('../lib/commands/serve');
+const config = require('../lib/commands/config');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -72,6 +73,9 @@ switch (command) {
     case 'kanban':
         serve(cleanArgs, options);
         break;
+    case 'config':
+        config(cleanArgs);
+        break;
     case 'help':
     case '--help':
     case '-h':
@@ -100,6 +104,7 @@ Commands:
   board [options]          Display board in terminal
   serve [options]          Start web viewer
   kanban [options]         Start web viewer (alias for serve)
+  config [subcommand]      View or modify board configuration
 
 Options for create:
   --priority <priority>    Set task priority (low|medium|high|critical)
@@ -123,6 +128,14 @@ Options for serve/kanban:
   --port <port>            Port to run server on (default: 3847)
   --no-open                Don't auto-open browser
 
+Config subcommands:
+  config                                     Show all settings
+  config notifications enable                Enable browser notifications
+  config notifications disable               Disable browser notifications
+  config notifications all                   Enable notifications for all changes
+  config notifications column <column-id>    Notify when tasks move to column
+  config notifications remove <column-id>    Remove column from notify list
+
 Examples:
   flatban init "My Project"
   flatban create "Fix login bug" --priority high --tags backend,security
@@ -133,5 +146,7 @@ Examples:
   flatban board --compact
   flatban serve --port 3000
   flatban kanban --no-open
+  flatban config notifications enable
+  flatban config notifications column review
 `);
 }
